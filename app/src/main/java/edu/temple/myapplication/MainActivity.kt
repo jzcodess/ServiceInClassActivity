@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var timerBinder: TimerService.TimerBinder
     private var bindservice = false
 
-    private val connection = object : ServiceConnection {
+    private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
             timerBinder = service as TimerService.TimerBinder
             bindservice = true
@@ -53,14 +53,14 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         Intent(this, TimerService::class.java).also { intent ->
-            bindService(intent, connection, Context.BIND_AUTO_CREATE)
+            bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
         }
     }
 
     override fun onStop() {
         super.onStop()
         if (bindservice) {
-            unbindService(connection)
+            unbindService(serviceConnection)
             bindservice = false
         }
     }
